@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+umask ${UMASK}
+
+exec \
+    s6-notifyoncheck -d -n 300 -w 1000 -c "nc -z localhost $(grep -oP '(?<=server\.port = )\d+' /config/server.conf)" \
+    cd /tachidesk s6-setuidgid tachidesk java ${JAVA_OPTS} -Dsuwayomi.tachidesk.config.server.rootDir="/config" -jar tachidesk_latest.jar

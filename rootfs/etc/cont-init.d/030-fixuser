@@ -1,0 +1,25 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+function __fixuser {
+
+    DOWNLOAD_DIR=${DOWNLOAD_DIR:-/downloads}
+
+    echo "Change owner to user tachidesk..."
+    echo "PUID=${PUID}"
+    echo "PGID=${PGID}"
+
+    groupmod -o -g "${PGID}" tachidesk
+    usermod -o -u "${PUID}" tachidesk
+
+    chown tachidesk:tachidesk \
+        /config \
+        /config/server.conf
+
+    if [[ "$(stat -c '%U' ${DOWNLOAD_DIR})" != "tachidesk" ]]; then
+        chown tachidesk:tachidesk ${DOWNLOAD_DIR}
+    fi
+
+}
+
+__fixuser 2>&1 | sed "s#^#cont-init: info: $(realpath $0): &#g"

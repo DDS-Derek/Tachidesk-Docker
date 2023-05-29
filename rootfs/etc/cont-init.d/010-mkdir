@@ -1,0 +1,22 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+function __mkdir {
+
+    DOWNLOAD_DIR=${DOWNLOAD_DIR:-/downloads}
+
+    umask ${UMASK}
+
+    echo "Make some folders..."
+
+    if [ ! -d ${DOWNLOAD_DIR} ]; then
+        mkdir ${DOWNLOAD_DIR}
+    fi
+
+    if [ ! -d /config ]; then
+        mkdir /config
+    fi
+
+}
+
+__mkdir 2>&1 | sed "s#^#cont-init: info: $(realpath $0): &#g"

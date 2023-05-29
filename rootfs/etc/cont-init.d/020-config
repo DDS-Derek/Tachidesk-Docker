@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+function __config {
+
+    DOWNLOAD_DIR=${DOWNLOAD_DIR:-/downloads}
+
+    umask ${UMASK}
+
+    if [[ ! -f /config/server.conf ]]; then
+        cp /defaults/server.conf /config/server.conf
+    fi
+
+    if [ -n "${DOWNLOAD_DIR}" ]; then
+        sed -i "/server.downloadsPath/c\server.downloadsPath = \"$DOWNLOAD_DIR\"" /config/server.conf
+    fi
+
+}
+
+__config 2>&1 | sed "s#^#cont-init: info: $(realpath $0): &#g"
