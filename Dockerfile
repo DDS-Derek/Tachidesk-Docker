@@ -1,3 +1,7 @@
+ARG BUILD_TAG
+
+FROM ghcr.io/suwayomi/tachidesk:${BUILD_TAG} AS Build
+
 FROM eclipse-temurin:11.0.19_7-jre-focal
 
 ENV S6_SERVICES_GRACETIME=30000 \
@@ -17,19 +21,19 @@ RUN set -xe && \
     ln -sf /command/with-contenv /usr/bin/with-contenv && \
     export DEBIAN_FRONTEND="noninteractive" && \
     apt-get update -y && \
-    apt-get install -y tzdata netcat ca-certificates && \
+    apt-get install -y netcat && \
     mkdir /tachidesk && \
     groupadd -r tachidesk -g 911 && \
     useradd -r tachidesk -g tachidesk -d /tachidesk -s /bin/bash -u 911 && \
-    curl -L $(curl -s https://api.github.com/repos/suwayomi/tachidesk-server/releases/latest | grep -o "https.*jar") -o /tachidesk/tachidesk_latest.jar && \
-    chown -R tachidesk:tachidesk /tachidesk && \
+    chown tachidesk:tachidesk /tachidesk && \
     apt-get autoremove -y && \
     apt-get clean -y && \
     rm -rf \
         /tmp/* \
-        /root/.cache \
         /var/lib/apt/lists/* \
         /var/tmp/*
+
+COPY --from=Build --chmod=755 /home/suwayomi/startup/tachidesk_latest.jar /tachidesk/tachidesk_latest.jar
 
 COPY --chmod=755 ./rootfs /
 
