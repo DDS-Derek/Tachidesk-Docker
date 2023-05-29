@@ -30,6 +30,8 @@ docker run -d \
     -e TZ="Asia/Shanghai" \
     -e JAVA_OPTS= `#optional` \
     -e DOWNLOAD_DIR= `#optional` \
+    --log-driver "json-file" \
+    --log-opt "max-size=10m" \
     ddsderek/tachidesk:latest
 ```
 
@@ -52,5 +54,9 @@ services:
             - TZ=Asia/Shanghai
             - JAVA_OPTS= #optional
             - DOWNLOAD_DIR= #optional
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
         image: 'ddsderek/tachidesk:latest'
 ```
