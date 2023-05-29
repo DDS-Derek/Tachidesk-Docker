@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11-jre-focal
+FROM eclipse-temurin:11.0.19_7-jre-focal
 
 ENV S6_SERVICES_GRACETIME=30000 \
     S6_KILL_GRACETIME=60000 \
