@@ -2,7 +2,7 @@ ARG BUILD_TAG
 
 FROM ghcr.io/suwayomi/tachidesk:${BUILD_TAG} AS Build
 
-FROM eclipse-temurin:11.0.20_8-jre-jammy
+FROM eclipse-temurin:21-jre-jammy
 
 ENV S6_SERVICES_GRACETIME=30000 \
     S6_KILL_GRACETIME=60000 \
