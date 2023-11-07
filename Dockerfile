@@ -15,7 +15,7 @@ ENV S6_SERVICES_GRACETIME=30000 \
     PGID=1000 \
     UMASK=022
 
-COPY --from=shinsenter/s6-overlay:v3.1.5.0 / /
+COPY --from=shinsenter/s6-overlay:v3.1.6.0 / /
 
 RUN set -xe && \
     ln -sf /command/with-contenv /usr/bin/with-contenv && \
